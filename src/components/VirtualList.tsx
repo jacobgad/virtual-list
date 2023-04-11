@@ -1,4 +1,5 @@
 import type { GenerateListItem } from "../utils";
+import { formatList } from "../utils";
 import { useDeferredValue, useMemo, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
 import { getFilteredList } from "../utils";
@@ -19,8 +20,12 @@ export default function VirtualList({ list }: Props) {
 		return getFilteredList(list, deferredSearchTerm, (item) => [item.name]);
 	}, [deferredSearchTerm, list]);
 
+	const renderedList = useMemo(() => {
+		return formatList(filteredList);
+	}, [filteredList]);
+
 	const rowVirtualizer = useVirtualizer({
-		count: filteredList.length,
+		count: renderedList.length,
 		getScrollElement: () => parentRef.current,
 		estimateSize: () => 32,
 		overscan: 25,
@@ -47,13 +52,14 @@ export default function VirtualList({ list }: Props) {
 					{rowVirtualizer.getVirtualItems().map((virtualItem) => (
 						<ListItem
 							key={virtualItem.key}
+							disabled={filteredList.length === 0}
 							className="absolute w-full"
 							style={{
 								height: `${virtualItem.size}px`,
 								transform: `translateY(${virtualItem.start}px)`,
 							}}
 						>
-							{filteredList[virtualItem.index]?.name}
+							{renderedList[virtualItem.index].name}
 						</ListItem>
 					))}
 				</ul>
