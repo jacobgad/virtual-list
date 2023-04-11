@@ -44,18 +44,14 @@ export default function VirtualList({ list }: Props) {
 				Showing {filteredList.length} of {list.length} results
 			</p>
 			<div ref={parentRef} className="mt-2 max-h-60 overflow-auto rounded border py-2">
-				<ul
-					ref={parentRef}
-					className="relative"
-					style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
-				>
+				<ul ref={parentRef} className="relative" style={{ height: rowVirtualizer.getTotalSize() }}>
 					{rowVirtualizer.getVirtualItems().map((virtualItem) => (
 						<ListItem
 							key={virtualItem.key}
 							disabled={filteredList.length === 0}
 							className="absolute w-full"
 							style={{
-								height: `${virtualItem.size}px`,
+								height: virtualItem.size,
 								transform: `translateY(${virtualItem.start}px)`,
 							}}
 						>
