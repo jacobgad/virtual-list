@@ -15,8 +15,8 @@ export default function App() {
 	}, [length]);
 
 	return (
-		<main className="mx-auto my-6 max-w-2xl">
-			<label className="flex items-center gap-2">
+		<main className="mx-auto max-w-2xl px-4 py-6">
+			<label className="mb-4 flex items-center gap-2">
 				<span>Total Items</span>
 				<input
 					type="range"
@@ -31,8 +31,9 @@ export default function App() {
 				<span className="inline-block">{length}</span>
 			</label>
 
-			<SynchronousList list={partialList} />
 			<VirtualList list={partialList} />
+			<hr className="my-8" />
+			<SynchronousList list={partialList} />
 		</main>
 	);
 }

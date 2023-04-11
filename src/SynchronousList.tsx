@@ -21,7 +21,7 @@ export default function SynchronousList({ list }: Props) {
 		: [{ id: 0, name: "Rendering is disabled" }];
 
 	return (
-		<main className="mx-auto my-6 max-w-2xl">
+		<section>
 			<div className="flex justify-between">
 				<h1>Synchronous List</h1>
 				<label>
@@ -53,6 +53,6 @@ export default function SynchronousList({ list }: Props) {
 					</li>
 				))}
 			</ul>
-		</main>
+		</section>
 	);
 }

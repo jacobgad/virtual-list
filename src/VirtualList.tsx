@@ -23,7 +23,7 @@ export default function VirtualList({ list }: Props) {
 	});
 
 	return (
-		<main className="mx-auto my-6 max-w-2xl">
+		<section>
 			<h1>Virtual List</h1>
 
 			<input
@@ -56,6 +56,6 @@ export default function VirtualList({ list }: Props) {
 					))}
 				</ul>
 			</div>
-		</main>
+		</section>
 	);
 }
