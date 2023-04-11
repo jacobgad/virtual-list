@@ -1,19 +1,23 @@
-import type { ListItem } from "./utils";
-import { useMemo, useRef, useState } from "react";
+import type { GenerateListItem } from "../utils";
+import { useDeferredValue, useMemo, useRef, useState } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { getFilteredList } from "./utils";
+import { getFilteredList } from "../utils";
+import ListItem from "./ui/ListItem";
+import TextInput from "./ui/TextInput";
 
 type Props = {
-	list: ListItem[];
+	list: GenerateListItem[];
 };
 
 export default function VirtualList({ list }: Props) {
 	const parentRef = useRef(null);
 	const [searchTerm, setSearchTerm] = useState("");
 
+	const deferredSearchTerm = useDeferredValue(searchTerm);
+
 	const filteredList = useMemo(() => {
-		return getFilteredList(list, searchTerm, (item) => [item.name]);
-	}, [searchTerm, list]);
+		return getFilteredList(list, deferredSearchTerm, (item) => [item.name]);
+	}, [deferredSearchTerm, list]);
 
 	const rowVirtualizer = useVirtualizer({
 		count: filteredList.length,
@@ -26,12 +30,10 @@ export default function VirtualList({ list }: Props) {
 		<section>
 			<h1>Virtual List</h1>
 
-			<input
-				type="text"
+			<TextInput
 				value={searchTerm}
 				onChange={(e) => setSearchTerm(e.target.value)}
 				placeholder="Search..."
-				className="selected:border-blue-400 mt-2 w-full rounded border px-4 py-1"
 			/>
 			<p className="mt-2 text-sm text-gray-500">
 				Showing {filteredList.length} of {list.length} results
@@ -43,16 +45,16 @@ export default function VirtualList({ list }: Props) {
 					style={{ height: `${rowVirtualizer.getTotalSize()}px` }}
 				>
 					{rowVirtualizer.getVirtualItems().map((virtualItem) => (
-						<li
+						<ListItem
 							key={virtualItem.key}
-							className="absolute w-full px-4 py-1 hover:bg-blue-100"
+							className="absolute w-full"
 							style={{
 								height: `${virtualItem.size}px`,
 								transform: `translateY(${virtualItem.start}px)`,
 							}}
 						>
 							{filteredList[virtualItem.index]?.name}
-						</li>
+						</ListItem>
 					))}
 				</ul>
 			</div>

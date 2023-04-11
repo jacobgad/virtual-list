@@ -1,9 +1,12 @@
-import type { ListItem } from "./utils";
+import type { GenerateListItem } from "../utils";
+import { formatList } from "../utils";
 import { useDeferredValue, useMemo, useState } from "react";
-import { getFilteredList } from "./utils";
+import { getFilteredList } from "../utils";
+import ListItem from "./ui/ListItem";
+import TextInput from "./ui/TextInput";
 
 type Props = {
-	list: ListItem[];
+	list: GenerateListItem[];
 };
 
 export default function SynchronousList({ list }: Props) {
@@ -16,41 +19,40 @@ export default function SynchronousList({ list }: Props) {
 		return getFilteredList(list, deferredSearchTerm, (item) => [item.name]);
 	}, [deferredSearchTerm, list]);
 
-	const enabledList: ListItem[] = enabled
-		? filteredList
-		: [{ id: 0, name: "Rendering is disabled" }];
+	const renderedList = useMemo(() => {
+		return formatList(filteredList, enabled);
+	}, [filteredList, enabled]);
 
 	return (
 		<section>
 			<div className="flex justify-between">
 				<h1>Synchronous List</h1>
-				<label>
-					<span className="mr-2">Enable Rendering</span>
+				<label className="flex items-center gap-2 text-sm">
+					<span>Enable Rendering</span>
 					<input
 						type="checkbox"
 						name="synchronous-enabled"
 						id="synchronous-enabled"
 						checked={enabled}
 						onChange={(e) => setEnabled(e.target.checked)}
+						className="rounded-sm"
 					/>
 				</label>
 			</div>
 
-			<input
-				type="text"
+			<TextInput
 				value={searchTerm}
 				onChange={(e) => setSearchTerm(e.target.value)}
 				placeholder="Search..."
-				className="selected:border-blue-400 mt-2 w-full rounded border px-4 py-1"
 			/>
 			<p className="mt-2 text-sm text-gray-500">
 				Showing {filteredList.length} of {list.length} results
 			</p>
 			<ul className="mt-2 max-h-60 overflow-auto rounded border py-2">
-				{enabledList.map((item) => (
-					<li key={item.id} className="px-4 py-1 hover:bg-blue-100">
+				{renderedList.map((item) => (
+					<ListItem key={item.id} disabled={!enabled || filteredList.length === 0}>
 						{item.name}
-					</li>
+					</ListItem>
 				))}
 			</ul>
 		</section>

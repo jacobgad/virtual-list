@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
 
-export type ListItem = ReturnType<typeof generateList>[number];
+export type GenerateListItem = ReturnType<typeof generateList>[number];
 
 export function generateList(length: number) {
 	const list = [];
@@ -26,4 +26,10 @@ export function getFilteredList<T>(
 		const words = getSearchableFields(item).join(" ").toLocaleLowerCase().split(" ");
 		return keywords.every((kw) => words.some((w) => w.startsWith(kw)));
 	});
+}
+
+export function formatList(list: GenerateListItem[], enabled = true) {
+	if (!enabled) return [{ id: 0, name: "Rendering is disabled" }];
+	if (list.length === 0) return [{ id: 0, name: "No matching items" }];
+	return list;
 }

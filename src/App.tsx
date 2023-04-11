@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { generateList } from "./utils";
-import SynchronousList from "./SynchronousList";
-import VirtualList from "./VirtualList";
+import SynchronousList from "./components/SynchronousList";
+import VirtualList from "./components/VirtualList";
 
 const MAX_LENGTH = 100000;
 
