@@ -34,7 +34,15 @@ export default function VirtualList({ list }: Props) {
 	return (
 		<section>
 			<h1>Virtual List</h1>
-
+			<p className="my-2 text-sm text-gray-500">
+				The implementation builds on the deferred value list, but critically instead of rendering
+				every list item, it virtualizes the list. At any point there are no more than 30 list items
+				that are rendered to the screen. Virtualization is implemented with the{" "}
+				<a href="https://tanstack.com/virtual/v3" className="font-semibold text-blue-600">
+					Tanstack Virtual
+				</a>{" "}
+				library.
+			</p>
 			<TextInput
 				value={searchTerm}
 				onChange={(e) => setSearchTerm(e.target.value)}
